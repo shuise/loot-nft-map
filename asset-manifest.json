@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.545ddaf6.css",
+    "main.js": "/static/js/main.f43e23a7.js",
+    "static/media/1.svg": "/static/media/1.e22cdc334f67092d75cf5c5efec595c4.svg",
+    "static/media/fortress.png": "/static/media/fortress.98e4a217ab65f31dfa66.png",
+    "static/media/castle.png": "/static/media/castle.05b2bfca7e411631fc6d.png",
+    "static/media/city.png": "/static/media/city.1aa1fa52526a19687d68.png",
+    "static/media/port.png": "/static/media/port.1ca84c093a0de146b754.png",
+    "static/media/protect.png": "/static/media/protect.b46f73f911b1b785bb7b.png",
+    "static/media/cloud.png": "/static/media/cloud.4314df16b06b3f2123a3.png",
+    "static/media/cod.png": "/static/media/cod.21988fda4ae75587483a.png",
+    "static/media/preview.png": "/static/media/preview.0854b0a6fe501397c6b1.png",
+    "static/media/battle.png": "/static/media/battle.00787434f3707a1a8148.png",
+    "static/media/morale.png": "/static/media/morale.36d7850393678f5d4870.png",
+    "static/media/chat.png": "/static/media/chat.65abfa2e9607bde492c8.png",
+    "index.html": "/index.html",
+    "static/media/wart-c.svg": "/static/media/wart-c.b6289a963c3e8b8ba0ed2794350facef.svg",
+    "main.545ddaf6.css.map": "/static/css/main.545ddaf6.css.map",
+    "main.f43e23a7.js.map": "/static/js/main.f43e23a7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.545ddaf6.css",
+    "static/js/main.f43e23a7.js"
+  ]
+}

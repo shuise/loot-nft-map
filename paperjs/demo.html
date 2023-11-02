@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PaperJS demo</title>
+<script type="text/javascript" src="./paper-full.js"></script>
+</head>
+<body>
+
+<canvas id="myCanvas" resize width="500" height="500"></canvas>
+
+<script type="text/paperscript" canvas="myCanvas">
+// https://iamshishir.com/multiple-dividing-a-path-shape-into-multiple-parts-in-paperjs/
+var myCircle = new Path.Circle(new Point(300, 300), 200);
+myCircle.fillColor = 'yellow';
+myCircle.strokeColor = 'black';
+
+
+function splitShape(shape,path){
+    var partsGroup = new Group();
+    partsGroup.addChild(shape);
+    // Looping all the Shapes. 
+    for(var i=0; i<path.children.length; i++)
+    {
+        // Dividing the Path Multiple Times. 
+        var tempParts = Array();
+        for (var x = 0; x < partsGroup.children.length; x++) {
+        if (path.children[i].intersects(partsGroup.children[x])) {
+            var result = partsGroup.children[x].divide(path.children[i], { insert: false, stroke: false, trace: false });
+            var clone = result.clone();
+            result.remove()
+            var group = new Group();
+            group.addChildren(clone.children);
+            for (var s = 0; s < group.children.length; s++) {
+                group.children[s].closed=true;
+               tempParts.push(group.children[s]);
+            }
+        }
+        else {
+                tempParts.push(partsGroup.children[x]);
+             }
+        } // end for
+        
+        partsGroup.removeChildren();
+        for(var y=0; y<tempParts.length;y++)
+        {
+           partsGroup.addChild(tempParts[y],{insert:false})
+        }
+    } // end for
+    return partsGroup;
+}
+
+var pathData1 = 'M200,250L110,27.614L122.386,50L50,50L190,77.614L100,50L22,50L50,50L100,22';
+var pathData2 = "846.94,785.40299999999996L442.288,276.3355L437.98849999999993,267.18125000000003L433.07099999999997,259.20275L426.94675,253.91150000000002L418.493,252.26074999999997L408.0975,251.30724999999998L400.0705,247.41525000000001L396.6975,241.65124999999998L394.12225,238.14874999999998L389.05524999999994,237.93875L382.95475,235.86625L376.98525,232.04049999999998L369.7845,230.7105L363.13824999999997,228.17674999999997L359.58125,225.89749999999998L356.18899999999996,227.42675L351.648,230.01974999999996L348.3985,233.18925L345.75600000000003,235.58625L342.38025,235.30874999999997L338.19350000000003,234.63125L332.452,235.96374999999998L326.0419999999999,237.77725L321.917,238.87675L319.74625000000003,237.7865L316.16999999999996,235.29574999999997L310.77174999999994,232.6875L306.93525,227.88124999999997L303.789,224.00599999999997L296.15749999999997,224.77724999999998L286.99399999999997,224.75125L280.88849999999996,223.06099999999998L275.54575,225.863L269.67825,228.28949999999998L263.18474999999995,226.82325L254.07174999999998,225.9115L247.29574999999997,222.997L244.45974999999999,218.03274999999996L238.09449999999998,219.599L229.8875,225.1995L222.114,226.06074999999998L212.34349999999998,225.26299999999998L202.82049999999995,223.64049999999997L198.557,218.33175L198.45749999999998,213.78625L196.44924999999998,213.78549999999998L193.1135,214.83550000000002L189.45425,213.165L182.0615,211.4855L174.36075,209.23225L170.296,206.90800000000002L165,209L119.75799999999998,14.43699999999998"
+
+//var path = new CompoundPath({
+//    children: [
+//        new Path.Line([100, 50], [600, 600]),
+//        new Path.Line([300, 50], [800, 600])
+//    ],
+//    fillColor: 'black',
+//    selected: true,
+//});
+
+tool.minDistance = 10;
+
+var path2 = new Path();
+path2.add([100, 150]);
+path2.add([200, 100]);
+path2.add([390, 150]);
+path2.add([400, 200]);
+path2.add([500, 250]);
+path2.add([600, 300]);
+
+var path3 = new Path()
+pathData2.split('L').forEach(function(item){
+    var pos = item.split(',');
+    path3.add([Math.round(pos[0]), Math.round(pos[1])]);
+});
+
+console.log(23, path2, path3);
+
+var path222 = new CompoundPath({
+    children: [
+        path2,
+        path3
+    ],
+    stokeColor: 'green',
+    fillColor: 'red',
+    selected: true,
+});
+
+var samePart = myCircle.getCrossings(path3);
+    samePart.fillColor = 'block';
+    samePart.position = [400, 100 ];
+    console.log(1111, samePart)
+
+//function onMouseDown(event){
+    var partsGroup = splitShape(myCircle, path222)
+
+    // Code to Move the Pieces Apart. 
+    var pathData = {};
+    for (var x = 0; x < partsGroup.children.length; x++) {
+        pathData[x] = partsGroup.children[x].pathData;
+        //partsGroup.children[2].fillColor = 'red';
+        //partsGroup.children[2].stokeColor = 'red';
+        //partsGroup.children[2].stokeWidth = 3;
+        partsGroup.children[x].position = partsGroup.children[x].position + [-10*x,20*x] 
+    }
+    path2.selected=true;
+    path3.selected=true;
+
+    var path = new Path(pathData['2']);
+    path.fillColor = 'pink';
+    path.position = [400, 100 ];
+//}
+
+</script>
+
+http://paperjs.org/reference/compoundpath/#divide-path
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+
+    <title>clippath</title>
+</head>
+<body>
+
+<div style="width:400px;height:400px;border:1px solid #ccc;background:url(./clip/sea.jpg) no-repeat 100% 0;background-size: auto 100%; display: inline-block;">
+	<canvas id="ex2" width="400" height="400" style="border:1px solid red;"></canvas>
+</div>
+<img src="./arc/1.svg" />
+
+<script src="./clip/fabric.min.js"></script>
+
+<script src="./clip/data.js"></script>
+<script>
+const colors = [
+	{ name: '信笺', value: 'env', font: '#f5f5f5' },
+	{ name: '李紫', value: '#2b1216', font: '#f5f5f5' },
+	{ name: '翠蓝', value: '#1e9eb3' },
+	{ name: '芦苇绿', value: '#b7d07a' },
+	{ name: '苍黄', value: '#806332', font: '#f5f5f5' },
+	{ name: '金驼', value: '#e46828', font: '#f5f5f5' },
+	{ name: '燕羽灰', value: '#685e48', font: '#f5f5f5' },
+	{ name: '漆黑', value: '#161823', font: '#f5f5f5' }
+];
+
+let maxP = 0;
+let minP = 1000;
+
+(function() {
+  var canvas = new fabric.Canvas('ex2');
+  canvas.setZoom(0.42);
+  var clipPath = new fabric.Rect({
+    width: 900, height: 1000, fill: 'red'
+  });
+  // 
+
+  let pathList = [];
+
+  window.coasts.forEach(function(item, index){
+  	// console.log('coasts1:', index, item);
+
+  	item = getRealPath(item);
+  	// console.log('maxP', maxP, minP)
+  	if(index === 5){
+  		// item += 'L400,0L400,400Z';
+  		item += 'L1000,0L1000,1000Z';
+  	}
+  	console.log('coasts2:', index, item);
+  	var path = new fabric.Path(item);
+  	let colorItem = colors[5];
+  	path.set({ fill: colorItem['value'], strokeWidth: 5, stroke: colors[7]['value'], opacity: 0.5 });
+  	// pathList.push(path)
+  	canvas.add(path);
+  })
+
+
+  let realBorders = [];
+  window.borders.forEach(function(item, index){
+  	item = getRealPath(item);
+  	console.log('border:', index, item);
+  	realBorders.push(item);
+  	var path = new fabric.Path(item);
+  	let colorItem = colors[4];
+  	path.set({ fill: 'transparent', strokeWidth: 5, stroke: colors[7]['value'], opacity: 0.5 });
+  	// pathList.push(path)
+  	canvas.add(path);
+  });
+  console.log('realBorders', realBorders)
+
+
+  window.rivers.forEach(function(item, index){
+  	item = getRealPath(item);
+  	var path = new fabric.Path(item);
+  	let colorItem = colors[7];
+  	path.set({ fill: 'transparent', stroke: colorItem['font'] || colorItem['value'], opacity: 1 });
+  	// pathList.push(path)
+  	// canvas.add(path);
+  })
+
+  // var group = new fabric.Group(pathList);
+  // group.clipPath = clipPath;
+  // canvas.add(group);
+  // canvas.setZoom(0.4);
+})()	
+
+
+function getRealPath(item){
+	item = item.split(',');
+
+	let result = [];
+	item.forEach(function(pos){
+		if(pos.indexOf('M') > -1){
+			result.push('M' + posReset(pos.replace('M','')));
+		}else if(pos.indexOf('L') > -1){
+			let vList = pos.split('L');
+			result.push( posReset(vList[0]) + 'L' + posReset(vList[1]) );
+		}else if(pos.indexOf('l') > -1){
+			let vList = pos.split('l');
+			result.push( posReset(vList[0]) + 'L' + posReset(vList[1]) );
+		}else{
+			result.push(posReset(pos));
+		}
+	});
+	// console.log(result);;
+
+	return result.join(',');
+}
+
+function posReset(v){
+	v = Math.round((v - 0 + 500)*2000/2000);
+	maxP = Math.max(v, maxP);
+	minP = Math.min(v, minP);
+	return v;
+}
+</script>
+</body>
+</html>
